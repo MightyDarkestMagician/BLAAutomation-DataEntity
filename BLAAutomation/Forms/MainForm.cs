@@ -1,7 +1,9 @@
-﻿using MaterialSkin;
+﻿using BLAAutomation.Models;
+using MaterialSkin;
 using MaterialSkin.Controls;
 using System;
 using System.Windows.Forms;
+using System.Linq;
 
 public partial class MainForm : MaterialForm
 {
@@ -121,6 +123,28 @@ public partial class MainForm : MaterialForm
 
     private void MainForm_Load(object sender, EventArgs e)
     {
+        using (var context = new UavContext())
+        {
+            var projects = context.Projects.ToList();
+            var uavParameters = context.UavParameters.ToList();
+            var uavCompartments = context.UavCompartments.ToList();
+            var equipmentParameters = context.EquipmentParameters.ToList();
+            var antennaParameters = context.AntennaParameters.ToList();
+            var uavAntennas = context.UavAntennas.ToList();
+            var landingSites = context.LandingSites.ToList();
+            var uavDevices = context.UavDevices.ToList();
+            var equipmentPlacementSchemes = context.EquipmentPlacementSchemes.ToList();
 
+            MessageBox.Show($"Projects: {projects.Count}\n" +
+                            $"UAV Parameters: {uavParameters.Count}\n" +
+                            $"UAV Compartments: {uavCompartments.Count}\n" +
+                            $"Equipment Parameters: {equipmentParameters.Count}\n" +
+                            $"Antenna Parameters: {antennaParameters.Count}\n" +
+                            $"UAV Antennas: {uavAntennas.Count}\n" +
+                            $"Landing Sites: {landingSites.Count}\n" +
+                            $"UAV Devices: {uavDevices.Count}\n" +
+                            $"Equipment Placement Schemes: {equipmentPlacementSchemes.Count}");
+        }
     }
+
 }

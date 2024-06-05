@@ -1,15 +1,15 @@
-﻿using BLAAutomation.Models;
-using System;
-using System.Data.Entity;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.Entity;
+using BLAAutomation.Models;
 
 namespace BLAAutomation
 {
     static class Program
     {
-        /// <summary>
-        /// Главная точка входа для приложения.
-        /// </summary>
         [STAThread]
         static void Main()
         {

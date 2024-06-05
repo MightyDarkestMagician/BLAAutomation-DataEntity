@@ -34,7 +34,7 @@ public partial class CreateProjectForm : MaterialForm
             var uavModels = context.UavParameters.ToList();
             _uavModelComboBox.DataSource = uavModels;
             _uavModelComboBox.DisplayMember = "Name";
-            _uavModelComboBox.ValueMember = "Model";
+            _uavModelComboBox.ValueMember = "UavModel"; // Изменено на UavModel
         }
     }
 
