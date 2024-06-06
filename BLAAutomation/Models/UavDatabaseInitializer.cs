@@ -90,18 +90,18 @@ namespace BLAAutomation
             // Devices
             var uavDevices = new[]
             {
-                new UavDevice { DeviceModel = "Device1", Weight = 200, NoiseImmunity = 0.95 },
-                new UavDevice { DeviceModel = "Device2", Weight = 250, NoiseImmunity = 0.85 },
-                new UavDevice { DeviceModel = "Device3", Weight = 300, NoiseImmunity = 0.75 },
-                new UavDevice { DeviceModel = "Device4", Weight = 220, NoiseImmunity = 0.90 },
-                new UavDevice { DeviceModel = "Device5", Weight = 270, NoiseImmunity = 0.80 },
-                new UavDevice { DeviceModel = "Device6", Weight = 320, NoiseImmunity = 0.70 },
-                new UavDevice { DeviceModel = "Device7", Weight = 230, NoiseImmunity = 0.88 },
-                new UavDevice { DeviceModel = "Device8", Weight = 280, NoiseImmunity = 0.78 },
-                new UavDevice { DeviceModel = "Device9", Weight = 330, NoiseImmunity = 0.68 },
-                new UavDevice { DeviceModel = "Device10", Weight = 240, NoiseImmunity = 0.87 },
-                new UavDevice { DeviceModel = "Device11", Weight = 290, NoiseImmunity = 0.77 },
-                new UavDevice { DeviceModel = "Device12", Weight = 340, NoiseImmunity = 0.67 }
+                new UavDevice { DeviceModel = "Device1", Weight = 90, NoiseImmunity = 0.95 },
+                new UavDevice { DeviceModel = "Device2", Weight = 75, NoiseImmunity = 0.85 },
+                new UavDevice { DeviceModel = "Device3", Weight = 80, NoiseImmunity = 0.75 },
+                new UavDevice { DeviceModel = "Device4", Weight = 92, NoiseImmunity = 0.90 },
+                new UavDevice { DeviceModel = "Device5", Weight = 87, NoiseImmunity = 0.80 },
+                new UavDevice { DeviceModel = "Device6", Weight = 72, NoiseImmunity = 0.70 },
+                new UavDevice { DeviceModel = "Device7", Weight = 93, NoiseImmunity = 0.88 },
+                new UavDevice { DeviceModel = "Device8", Weight = 98, NoiseImmunity = 0.78 },
+                new UavDevice { DeviceModel = "Device9", Weight = 73, NoiseImmunity = 0.68 },
+                new UavDevice { DeviceModel = "Device10", Weight = 84, NoiseImmunity = 0.87 },
+                new UavDevice { DeviceModel = "Device11", Weight = 79, NoiseImmunity = 0.77 },
+                new UavDevice { DeviceModel = "Device12", Weight = 74, NoiseImmunity = 0.67 }
             };
             context.UavDevices.AddRange(uavDevices);
 

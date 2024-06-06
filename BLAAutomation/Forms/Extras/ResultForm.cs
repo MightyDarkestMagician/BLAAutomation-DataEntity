@@ -1,55 +1,63 @@
-﻿using MaterialSkin;
-using MaterialSkin.Controls;
-using BLAAutomation.Models;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using BLAAutomation.Models;
 
-public partial class ResultForm : MaterialForm
+public partial class ResultForm : Form
 {
-    private readonly MaterialSkinManager _materialSkinManager;
-    private DrawScheme _drawScheme;
+    private Project Project;
+    private string[] BestSolution;
+    private Bitmap Bitmap;
+    private DrawScheme DrawScheme;
 
-    public ResultForm(Project project)
+    public ResultForm(Project project, string[] bestSolution)
     {
-        // Инициализация MaterialSkinManager
-        _materialSkinManager = MaterialSkinManager.Instance;
-        _materialSkinManager.AddFormToManage(this);
-        _materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-        _materialSkinManager.ColorScheme = new ColorScheme(
-            Primary.BlueGrey800, Primary.BlueGrey900,
-            Primary.BlueGrey500, Accent.LightBlue200,
-            TextShade.WHITE
-        );
+        Project = project;
+        BestSolution = bestSolution;
 
-        // Настройка элементов формы
-        InitializeComponent();
-        LoadResultData(project);
-    }
+        Text = "Лучшее решение";
+        Size = new Size(800, 600);
 
-    private void ResultForm_Load(object sender, EventArgs e)
-    {
-        // Отрисовка схемы после загрузки формы
-        _drawScheme?.DrawProject();
-    }
+        // Создаем Bitmap для рисования схемы
+        Bitmap = new Bitmap(ClientSize.Width, ClientSize.Height);
+        DrawScheme = new DrawScheme(project, Bitmap);
 
-    private void LoadResultData(Project project)
-    {
-        // Инициализация DrawScheme
-        Bitmap image = new Bitmap(800, 600);
-        _drawScheme = new DrawScheme(project, image);
+        // Отрисовываем схему проекта
+        DrawScheme.DrawProject();
 
-        // Добавление DrawScheme на форму
+        // Создаем PictureBox для отображения схемы
         PictureBox pictureBox = new PictureBox
         {
             Dock = DockStyle.Fill,
-            Image = image,
-            SizeMode = PictureBoxSizeMode.StretchImage
+            Image = DrawScheme.Image,
+            SizeMode = PictureBoxSizeMode.AutoSize
         };
 
-        this.Controls.Add(pictureBox);
+        // Добавляем GroupBoxes отсеков на форму
+        foreach (var groupBox in DrawScheme.CompartmentGroupBoxes)
+        {
+            Controls.Add(groupBox);
+        }
 
-        // Отрисовка схемы
-        _drawScheme.DrawProject();
+        // Добавляем кнопки позиций устройств на форму
+        foreach (var button in DrawScheme.PositionButtons)
+        {
+            Controls.Add(button);
+        }
+
+        // Добавляем кнопки антенн на форму
+        foreach (var button in DrawScheme.AntennaButton)
+        {
+            Controls.Add(button);
+        }
+
+        Controls.Add(pictureBox);
     }
+
+
+    private void ResultForm_Load(object sender, EventArgs e)
+    {
+
+    }
+
 }

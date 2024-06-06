@@ -5,7 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Windows.Forms;
 using BLAAutomation.Models;
-using System.Windows.Controls;
+using System.Drawing;
 
 public partial class AlgorithmSettingsForm : MaterialForm
 {
@@ -66,6 +66,9 @@ public partial class AlgorithmSettingsForm : MaterialForm
                     var selectedProject = context.Projects.Include(p => p.UavParameters)
                                                            .Include(p => p.UavParameters.Compartments)
                                                            .Include(p => p.DevicesForPlacement.Select(dfp => dfp.UavDevice))
+                                                           .Include(p => p.UavParameters.Fuselages.Select(f => f.CompartmentsInFuselage))
+                                                           .Include(p => p.UavParameters.Fuselages.Select(f => f.AntennasInFuselage))
+                                                           .Include(p => p.UavParameters.Fuselages.Select(f => f.PositionsForPlacement))
                                                            .FirstOrDefault(p => p.ProjectNumber == selectedProjectNumber);
                     if (selectedProject == null)
                     {
@@ -73,9 +76,21 @@ public partial class AlgorithmSettingsForm : MaterialForm
                         return;
                     }
 
+                    selectedProject.LoadRelatedData();
+
+                    // Проверка загруженных данных
+                    ShowLoadedProjectData(selectedProject);
+
+                    // Проверка и отображение данных SelectedFuselage
+                    ShowSelectedFuselageData(selectedProject.SelectedFuselage);
+
                     // Сохранение настроек алгоритма
                     var settings = new GeneticAlgorithm(selectedProject, populationSize, generationCount, crossoverCount, mutationCount);
-                    settings.MainProcess();
+                    settings.Run();
+
+                    // Получение лучшего решения и вывод на форму
+                    var bestSolution = settings.GetBestSolution();
+                    DisplayBestSolution(selectedProject, bestSolution);
                 }
 
                 MessageBox.Show("Настройки алгоритма успешно сохранены и процесс выполнен.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -89,6 +104,95 @@ public partial class AlgorithmSettingsForm : MaterialForm
         {
             MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка выполнения", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+    }
+
+    private void ShowLoadedProjectData(Project project)
+    {
+        string data = $"Проект: {project.ProjectName}\nМодель БЛА: {project.UavModel}\n" +
+                      $"Количество отсеков: {project.UavParameters.Compartments.Count}\n" +
+                      $"Количество устройств: {project.DevicesForPlacement.Count}\n";
+
+        foreach (var compartment in project.UavParameters.Compartments)
+        {
+            data += $"Отсек {compartment.CompartmentNumber}: " +
+                    $"грузоподъемность {compartment.LoadCapacity}, " +
+                    $"координаты ({compartment.CoordinateX}, {compartment.CoordinateY}, {compartment.CoordinateZ})\n";
+        }
+
+        foreach (var device in project.DevicesForPlacement)
+        {
+            data += $"Устройство {device.UavDevice.DeviceModel}: " +
+                    $"вес {device.UavDevice.Weight}, " +
+                    $"помехоустойчивость {device.UavDevice.NoiseImmunity}\n";
+        }
+
+        MessageBox.Show(data, "Данные проекта", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private void ShowSelectedFuselageData(Fuselage fuselage)
+    {
+        if (fuselage == null)
+        {
+            MessageBox.Show("SelectedFuselage is null.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
+        string data = $"Fuselage ID: {fuselage.Id}\nName: {fuselage.Name}\n" +
+                      $"Antennas: {fuselage.AntennasInFuselage.Count}\n" +
+                      $"Compartments: {fuselage.CompartmentsInFuselage.Count}\n";
+
+        foreach (var compartment in fuselage.CompartmentsInFuselage)
+        {
+            data += $"Compartment {compartment.Id_Compartment}: " +
+                    $"Coordinates ({compartment.CoordinateX}, {compartment.CoordinateY}, {compartment.CoordinateZ})\n";
+        }
+
+        MessageBox.Show(data, "SelectedFuselage Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private void DisplayBestSolution(Project project, string[] bestSolution)
+    {
+        var resultForm = new Form
+        {
+            Text = "Лучшее решение",
+            Size = new Size(800, 600)
+        };
+
+        // Создаем Bitmap для рисования схемы
+        Bitmap bitmap = new Bitmap(resultForm.ClientSize.Width, resultForm.ClientSize.Height);
+        DrawScheme drawScheme = new DrawScheme(project, bitmap);
+
+        // Отрисовываем схему проекта
+        drawScheme.DrawProject();
+
+        // Создаем PictureBox для отображения схемы
+        PictureBox pictureBox = new PictureBox
+        {
+            Dock = DockStyle.Fill,
+            Image = drawScheme.Image, // исправлено
+            SizeMode = PictureBoxSizeMode.AutoSize
+        };
+
+        // Добавляем GroupBoxes отсеков на форму
+        foreach (var groupBox in drawScheme.CompartmentGroupBoxes)
+        {
+            resultForm.Controls.Add(groupBox);
+        }
+
+        // Добавляем кнопки позиций устройств на форму
+        foreach (var button in drawScheme.PositionButtons)
+        {
+            resultForm.Controls.Add(button);
+        }
+
+        // Добавляем кнопки антенн на форму
+        foreach (var button in drawScheme.AntennaButton)
+        {
+            resultForm.Controls.Add(button);
+        }
+
+        resultForm.Controls.Add(pictureBox);
+        resultForm.ShowDialog();
     }
 
     private void _populationSizeField_Click(object sender, EventArgs e) { }

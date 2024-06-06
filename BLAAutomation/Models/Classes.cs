@@ -39,6 +39,7 @@ namespace BLAAutomation.Models
                         .Include(p => p.UavParameters)
                         .Include(p => p.UavParameters.Compartments)
                         .Include(p => p.UavParameters.Fuselages)
+                        .Include(p => p.DevicesForPlacement.Select(dfp => dfp.UavDevice))
                         .FirstOrDefault(p => p.ProjectNumber == this.ProjectNumber);
 
                     if (project != null)
@@ -46,6 +47,16 @@ namespace BLAAutomation.Models
                         this.UavParameters = project.UavParameters;
                         this.Compartments = project.UavParameters.Compartments.ToList();
                         this.SelectedFuselage = project.UavParameters.Fuselages.FirstOrDefault();
+
+                        // Проверка и инициализация поля SelectedFuselage
+                        if (this.SelectedFuselage == null)
+                        {
+                            throw new Exception("SelectedFuselage is null.");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Project not found.");
                     }
                 }
             }
@@ -57,7 +68,7 @@ namespace BLAAutomation.Models
         }
     }
 
-    public class UavParameters
+        public class UavParameters
     {
         [Key]
         public string UavModel { get; set; }
