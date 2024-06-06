@@ -8,24 +8,22 @@ namespace BLAAutomation.Models
     {
         protected override void Seed(UavContext context)
         {
-            var projects = new List<Project>
-            {
-                new Project { ProjectNumber = 1, ProjectName = "Project 1", UavModel = "UAV1" },
-                new Project { ProjectNumber = 2, ProjectName = "Project 2", UavModel = "UAV2" },
-                new Project { ProjectNumber = 3, ProjectName = "Project 3", UavModel = "UAV3" }
-            };
-
-            projects.ForEach(p => context.Projects.Add(p));
-            context.SaveChanges();
-
             var uavParameters = new List<UavParameters>
             {
                 new UavParameters { UavModel = "UAV1", Name = "UAV Model 1", TotalCompartments = 3, Weight = 150.0 },
                 new UavParameters { UavModel = "UAV2", Name = "UAV Model 2", TotalCompartments = 4, Weight = 200.0 },
                 new UavParameters { UavModel = "UAV3", Name = "UAV Model 3", TotalCompartments = 5, Weight = 250.0 }
             };
-
             uavParameters.ForEach(u => context.UavParameters.Add(u));
+            context.SaveChanges();
+
+            var projects = new List<Project>
+            {
+                new Project { ProjectNumber = 1, ProjectName = "Project 1", UavModel = "UAV1" },
+                new Project { ProjectNumber = 2, ProjectName = "Project 2", UavModel = "UAV2" },
+                new Project { ProjectNumber = 3, ProjectName = "Project 3", UavModel = "UAV3" }
+            };
+            projects.ForEach(p => context.Projects.Add(p));
             context.SaveChanges();
 
             var uavCompartments = new List<UavCompartment>
@@ -40,7 +38,6 @@ namespace BLAAutomation.Models
                 new UavCompartment { CompartmentNumber = 8, UavModel = "UAV3", LoadCapacity = 120.0, CoordinateX = 10.0, CoordinateY = 20.0, CoordinateZ = 0.0, Length = 12.0, Width = 11.0, Height = 10.0 },
                 new UavCompartment { CompartmentNumber = 9, UavModel = "UAV3", LoadCapacity = 130.0, CoordinateX = 20.0, CoordinateY = 20.0, CoordinateZ = 0.0, Length = 13.0, Width = 12.0, Height = 11.0 }
             };
-
             uavCompartments.ForEach(c => context.UavCompartments.Add(c));
             context.SaveChanges();
 
@@ -53,7 +50,6 @@ namespace BLAAutomation.Models
                 new EquipmentParameters { EquipmentModel = "EQUIP5", PowerConsumption = 40.0, NoiseImmunity = 50.0, Weight = 30.0 },
                 new EquipmentParameters { EquipmentModel = "EQUIP6", PowerConsumption = 45.0, NoiseImmunity = 55.0, Weight = 35.0 }
             };
-
             equipmentParameters.ForEach(e => context.EquipmentParameters.Add(e));
             context.SaveChanges();
 
@@ -63,7 +59,6 @@ namespace BLAAutomation.Models
                 new AntennaParameters { AntennaMark = "ANT2", FrequencyRange = 200.0, Gain = 25.0, Power = 20.0, Impedance = 60.0 },
                 new AntennaParameters { AntennaMark = "ANT3", FrequencyRange = 300.0, Gain = 30.0, Power = 25.0, Impedance = 70.0 }
             };
-
             antennaParameters.ForEach(a => context.AntennaParameters.Add(a));
             context.SaveChanges();
 
@@ -73,17 +68,15 @@ namespace BLAAutomation.Models
                 new UavAntenna { AntennaMark = "ANT2", UavModel = "UAV2", AntennaModel = "Model2", Name = "Antenna 2", CoordinateX = 3.0, CoordinateY = 4.0, CoordinateZ = 5.0 },
                 new UavAntenna { AntennaMark = "ANT3", UavModel = "UAV3", AntennaModel = "Model3", Name = "Antenna 3", CoordinateX = 6.0, CoordinateY = 7.0, CoordinateZ = 8.0 }
             };
-
             uavAntennas.ForEach(ua => context.UavAntennas.Add(ua));
             context.SaveChanges();
 
-            var landingSites = new List<LandingSites>
+            var landingSites = new List<LandingSite>
             {
-                new LandingSites { LandingSiteNumber = 1, UavModel = "UAV1", CoordinateX = 0.0, CoordinateY = 1.0, CoordinateZ = 2.0, WeightLimit = 100.0 },
-                new LandingSites { LandingSiteNumber = 2, UavModel = "UAV2", CoordinateX = 3.0, CoordinateY = 4.0, CoordinateZ = 5.0, WeightLimit = 150.0 },
-                new LandingSites { LandingSiteNumber = 3, UavModel = "UAV3", CoordinateX = 6.0, CoordinateY = 7.0, CoordinateZ = 8.0, WeightLimit = 200.0 }
+                new LandingSite { LandingSiteNumber = 1, UavModel = "UAV1", CoordinateX = 0.0, CoordinateY = 1.0, CoordinateZ = 2.0, WeightLimit = 100.0 },
+                new LandingSite { LandingSiteNumber = 2, UavModel = "UAV2", CoordinateX = 3.0, CoordinateY = 4.0, CoordinateZ = 5.0, WeightLimit = 150.0 },
+                new LandingSite { LandingSiteNumber = 3, UavModel = "UAV3", CoordinateX = 6.0, CoordinateY = 7.0, CoordinateZ = 8.0, WeightLimit = 200.0 }
             };
-
             landingSites.ForEach(ls => context.LandingSites.Add(ls));
             context.SaveChanges();
 
@@ -93,7 +86,6 @@ namespace BLAAutomation.Models
                 new UavDevice { DeviceModel = "DEV2", Weight = 70.0, NoiseImmunity = 80.0 },
                 new UavDevice { DeviceModel = "DEV3", Weight = 90.0, NoiseImmunity = 100.0 }
             };
-
             uavDevices.ForEach(ud => context.UavDevices.Add(ud));
             context.SaveChanges();
 
@@ -106,7 +98,6 @@ namespace BLAAutomation.Models
                 new EquipmentPlacementScheme { SchemeNumber = 5, EquipmentModel = "EQUIP5", DeviceModel = "DEV2", CompartmentNumber = 5, SchemeDescription = "Scheme 5", CreationDate = DateTime.Now, UavModel = "UAV2" },
                 new EquipmentPlacementScheme { SchemeNumber = 6, EquipmentModel = "EQUIP6", DeviceModel = "DEV3", CompartmentNumber = 6, SchemeDescription = "Scheme 6", CreationDate = DateTime.Now, UavModel = "UAV3" }
             };
-
             equipmentPlacementSchemes.ForEach(eps => context.EquipmentPlacementSchemes.Add(eps));
             context.SaveChanges();
         }

@@ -133,7 +133,7 @@ public partial class ViewLandingSitesForm : MaterialForm
                         if (!line.StartsWith("LandingSiteNumber"))
                         {
                             var values = line.Split(',');
-                            var landingSite = new LandingSites
+                            var landingSite = new LandingSite
                             {
                                 LandingSiteNumber = int.Parse(values[0]),
                                 UavModel = values[1],

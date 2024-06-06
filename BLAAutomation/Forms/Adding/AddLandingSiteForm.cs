@@ -68,7 +68,7 @@ public partial class AddLandingSiteForm : MaterialForm
                 // Сохранение посадочного места в базу данных
                 using (var context = new UavContext())
                 {
-                    var landingSite = new LandingSites
+                    var landingSite = new LandingSite
                     {
                         LandingSiteNumber = landingSiteNumber,
                         UavModel = selectedProject.UavModel,

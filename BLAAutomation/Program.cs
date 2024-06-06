@@ -13,7 +13,7 @@ namespace BLAAutomation
         [STAThread]
         static void Main()
         {
-            Database.SetInitializer(new InitializeDatabase());
+            //Database.SetInitializer(new InitializeDatabase());
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

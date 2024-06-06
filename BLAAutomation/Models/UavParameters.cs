@@ -15,6 +15,6 @@ namespace BLAAutomation.Models
         public ICollection<UavCompartment> Compartments { get; set; }
         public ICollection<EquipmentPlacementScheme> EquipmentPlacementSchemes { get; set; }
         public ICollection<UavAntenna> Antennas { get; set; }
-        public ICollection<LandingSites> LandingSites { get; set; }
+        public ICollection<LandingSite> LandingSites { get; set; }
     }
 }
