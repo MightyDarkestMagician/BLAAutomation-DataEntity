@@ -137,7 +137,7 @@ public partial class AlgorithmSettingsForm : MaterialForm
             return;
         }
 
-        string data = $"Fuselage ID: {fuselage.Id}\nName: {fuselage.Name}\n" +
+        string data = $"Fuselage ID: {fuselage.Id_Fuselage}\nName: {fuselage.Name}\n" +
                       $"Antennas: {fuselage.AntennasInFuselage.Count}\n" +
                       $"Compartments: {fuselage.CompartmentsInFuselage.Count}\n";
 

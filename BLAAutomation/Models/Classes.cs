@@ -7,8 +7,6 @@ using System.Linq;
 
 namespace BLAAutomation.Models
 {
-
-
     public class Project
     {
         [Key]
@@ -21,13 +19,12 @@ namespace BLAAutomation.Models
 
         public virtual ICollection<DeviceForPlacement> DevicesForPlacement { get; set; }
 
-        // Use separate collection to store Compartments data explicitly
-        [NotMapped]
-        public ICollection<UavCompartment> Compartments { get; set; }
+        public virtual ICollection<UavCompartment> Compartments { get; set; }
 
-        // Use separate field to store Fuselage data explicitly
-        [NotMapped]
-        public Fuselage SelectedFuselage { get; set; }
+        public int? SelectedFuselageId { get; set; }
+
+        [ForeignKey("SelectedFuselageId")]
+        public virtual Fuselage SelectedFuselage { get; set; }
 
         public void LoadRelatedData()
         {
@@ -48,7 +45,6 @@ namespace BLAAutomation.Models
                         this.Compartments = project.UavParameters.Compartments.ToList();
                         this.SelectedFuselage = project.UavParameters.Fuselages.FirstOrDefault();
 
-                        // Проверка и инициализация поля SelectedFuselage
                         if (this.SelectedFuselage == null)
                         {
                             throw new Exception("SelectedFuselage is null.");
@@ -68,7 +64,7 @@ namespace BLAAutomation.Models
         }
     }
 
-        public class UavParameters
+    public class UavParameters
     {
         [Key]
         public string UavModel { get; set; }
@@ -236,7 +232,8 @@ namespace BLAAutomation.Models
 
     public class Fuselage
     {
-        public int Id { get; set; }
+        [Key]
+        public int Id_Fuselage { get; set; }
         public string Name { get; set; }
         public virtual ICollection<AntennaInFuselage> AntennasInFuselage { get; set; }
         public virtual ICollection<CompartmentInFuselage> CompartmentsInFuselage { get; set; }
@@ -251,11 +248,11 @@ namespace BLAAutomation.Models
             var fuselage = context.Fuselages.Include(f => f.AntennasInFuselage)
                                             .Include(f => f.CompartmentsInFuselage)
                                             .Include(f => f.PositionsForPlacement)
-                                            .SingleOrDefault(f => f.Id == id);
+                                            .SingleOrDefault(f => f.Id_Fuselage == id);
 
             if (fuselage == null) throw new Exception("Fuselage not found.");
 
-            Id = fuselage.Id;
+            Id_Fuselage = fuselage.Id_Fuselage;
             Name = fuselage.Name;
             AntennasInFuselage = fuselage.AntennasInFuselage;
             CompartmentsInFuselage = fuselage.CompartmentsInFuselage;

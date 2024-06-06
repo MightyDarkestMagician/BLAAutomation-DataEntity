@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using BLAAutomation.Models;
-using LiveCharts.Wpf.Charts.Base;
 
 namespace BLAAutomation
 {
@@ -11,7 +10,7 @@ namespace BLAAutomation
     {
         protected override void Seed(UavContext context)
         {
-            // UAV Parameters
+            // 1. UavParameters
             var uavParameters = new[]
             {
                 new UavParameters { UavModel = "UAV1", Name = "UAV Model 1", TotalCompartments = 4, Weight = 1000 },
@@ -21,7 +20,7 @@ namespace BLAAutomation
             };
             context.UavParameters.AddRange(uavParameters);
 
-            // Projects
+            // 2. Project
             var projects = new[]
             {
                 new Project { ProjectNumber = 1, ProjectName = "Project 1", UavModel = "UAV1" },
@@ -31,28 +30,24 @@ namespace BLAAutomation
             };
             context.Projects.AddRange(projects);
 
-            // Compartments
+            // 3. UavCompartment
             var compartments = new[]
             {
-                // Project 1 Compartments
                 new UavCompartment { CompartmentNumber = 1, UavModel = "UAV1", LoadCapacity = 100, CoordinateX = 2, CoordinateY = 3, CoordinateZ = 1, Length = 5, Width = 2, Height = 1.5 },
                 new UavCompartment { CompartmentNumber = 2, UavModel = "UAV1", LoadCapacity = 150, CoordinateX = 5, CoordinateY = 1, CoordinateZ = 2, Length = 5, Width = 2, Height = 1.5 },
                 new UavCompartment { CompartmentNumber = 3, UavModel = "UAV1", LoadCapacity = 200, CoordinateX = 3, CoordinateY = 4, CoordinateZ = 5, Length = 5, Width = 2, Height = 1.5 },
                 new UavCompartment { CompartmentNumber = 4, UavModel = "UAV1", LoadCapacity = 120, CoordinateX = 1, CoordinateY = 2, CoordinateZ = 3, Length = 5, Width = 2, Height = 1.5 },
 
-                // Project 2 Compartments
                 new UavCompartment { CompartmentNumber = 5, UavModel = "UAV2", LoadCapacity = 110, CoordinateX = 3, CoordinateY = 2, CoordinateZ = 1, Length = 6, Width = 3, Height = 1.7 },
                 new UavCompartment { CompartmentNumber = 6, UavModel = "UAV2", LoadCapacity = 160, CoordinateX = 6, CoordinateY = 2, CoordinateZ = 3, Length = 6, Width = 3, Height = 1.7 },
                 new UavCompartment { CompartmentNumber = 7, UavModel = "UAV2", LoadCapacity = 210, CoordinateX = 4, CoordinateY = 5, CoordinateZ = 6, Length = 6, Width = 3, Height = 1.7 },
                 new UavCompartment { CompartmentNumber = 8, UavModel = "UAV2", LoadCapacity = 130, CoordinateX = 2, CoordinateY = 3, CoordinateZ = 4, Length = 6, Width = 3, Height = 1.7 },
 
-                // Project 3 Compartments
                 new UavCompartment { CompartmentNumber = 9, UavModel = "UAV3", LoadCapacity = 120, CoordinateX = 4, CoordinateY = 3, CoordinateZ = 2, Length = 7, Width = 3.5, Height = 1.8 },
                 new UavCompartment { CompartmentNumber = 10, UavModel = "UAV3", LoadCapacity = 170, CoordinateX = 7, CoordinateY = 3, CoordinateZ = 4, Length = 7, Width = 3.5, Height = 1.8 },
                 new UavCompartment { CompartmentNumber = 11, UavModel = "UAV3", LoadCapacity = 220, CoordinateX = 5, CoordinateY = 6, CoordinateZ = 7, Length = 7, Width = 3.5, Height = 1.8 },
                 new UavCompartment { CompartmentNumber = 12, UavModel = "UAV3", LoadCapacity = 140, CoordinateX = 3, CoordinateY = 4, CoordinateZ = 5, Length = 7, Width = 3.5, Height = 1.8 },
 
-                // Project 4 Compartments
                 new UavCompartment { CompartmentNumber = 13, UavModel = "UAV4", LoadCapacity = 130, CoordinateX = 5, CoordinateY = 4, CoordinateZ = 3, Length = 8, Width = 4, Height = 2 },
                 new UavCompartment { CompartmentNumber = 14, UavModel = "UAV4", LoadCapacity = 180, CoordinateX = 8, CoordinateY = 4, CoordinateZ = 5, Length = 8, Width = 4, Height = 2 },
                 new UavCompartment { CompartmentNumber = 15, UavModel = "UAV4", LoadCapacity = 230, CoordinateX = 6, CoordinateY = 7, CoordinateZ = 8, Length = 8, Width = 4, Height = 2 },
@@ -60,34 +55,7 @@ namespace BLAAutomation
             };
             context.UavCompartments.AddRange(compartments);
 
-            // Antennas
-            var antennaParameters = new[]
-            {
-                new AntennaParameters { AntennaMark = "Antenna1", FrequencyRange = 1000000000, Gain = 1, Power = 1, Impedance = 50 },
-                new AntennaParameters { AntennaMark = "Antenna2", FrequencyRange = 1000000000, Gain = 1, Power = 1, Impedance = 50 }
-            };
-            context.AntennaParameters.AddRange(antennaParameters);
-
-            var uavAntennas = new[]
-            {
-                new UavAntenna { Id = 1, AntennaMark = "Antenna1", UavModel = "UAV1", AntennaModel = "AntennaModel1", Name = "Antenna 1", CoordinateX = 0, CoordinateY = 0, CoordinateZ = 0 },
-                new UavAntenna { Id = 2, AntennaMark = "Antenna2", UavModel = "UAV1", AntennaModel = "AntennaModel2", Name = "Antenna 2", CoordinateX = 10, CoordinateY = 10, CoordinateZ = 10 }
-            };
-            context.UavAntennas.AddRange(uavAntennas);
-
-            // Equipment
-            var equipmentParameters = new[]
-            {
-                new EquipmentParameters { EquipmentModel = "Equipment1", PowerConsumption = 0, NoiseImmunity = 10, Weight = 20 },
-                new EquipmentParameters { EquipmentModel = "Equipment2", PowerConsumption = 0, NoiseImmunity = 15, Weight = 30 },
-                new EquipmentParameters { EquipmentModel = "Equipment3", PowerConsumption = 0, NoiseImmunity = 12, Weight = 40 },
-                new EquipmentParameters { EquipmentModel = "Equipment4", PowerConsumption = 0, NoiseImmunity = 18, Weight = 50 },
-                new EquipmentParameters { EquipmentModel = "Equipment5", PowerConsumption = 0, NoiseImmunity = 11, Weight = 35 },
-                new EquipmentParameters { EquipmentModel = "Equipment6", PowerConsumption = 0, NoiseImmunity = 14, Weight = 25 }
-            };
-            context.EquipmentParameters.AddRange(equipmentParameters);
-
-            // Devices
+            // 4. UavDevice
             var uavDevices = new[]
             {
                 new UavDevice { DeviceModel = "Device1", Weight = 90, NoiseImmunity = 0.95 },
@@ -105,7 +73,98 @@ namespace BLAAutomation
             };
             context.UavDevices.AddRange(uavDevices);
 
-            // Positions for Placement
+            // 5. DeviceForPlacement
+            var devicesForPlacement = new[]
+            {
+                new DeviceForPlacement { Id_Project = 1, Id_Device = "Device1" },
+                new DeviceForPlacement { Id_Project = 1, Id_Device = "Device2" },
+                new DeviceForPlacement { Id_Project = 1, Id_Device = "Device3" },
+                new DeviceForPlacement { Id_Project = 1, Id_Device = "Device4" },
+
+                new DeviceForPlacement { Id_Project = 2, Id_Device = "Device5" },
+                new DeviceForPlacement { Id_Project = 2, Id_Device = "Device6" },
+                new DeviceForPlacement { Id_Project = 2, Id_Device = "Device7" },
+                new DeviceForPlacement { Id_Project = 2, Id_Device = "Device8" },
+
+                new DeviceForPlacement { Id_Project = 3, Id_Device = "Device9" },
+                new DeviceForPlacement { Id_Project = 3, Id_Device = "Device10" },
+                new DeviceForPlacement { Id_Project = 3, Id_Device = "Device11" },
+                new DeviceForPlacement { Id_Project = 3, Id_Device = "Device12" },
+
+                new DeviceForPlacement { Id_Project = 4, Id_Device = "Device1" },
+                new DeviceForPlacement { Id_Project = 4, Id_Device = "Device2" },
+                new DeviceForPlacement { Id_Project = 4, Id_Device = "Device3" },
+                new DeviceForPlacement { Id_Project = 4, Id_Device = "Device4" }
+            };
+            context.DevicesForPlacement.AddRange(devicesForPlacement);
+
+            // 6. EquipmentParameters
+            var equipmentParameters = new[]
+            {
+                new EquipmentParameters { EquipmentModel = "Equipment1", PowerConsumption = 0, NoiseImmunity = 10, Weight = 20 },
+                new EquipmentParameters { EquipmentModel = "Equipment2", PowerConsumption = 0, NoiseImmunity = 15, Weight = 30 },
+                new EquipmentParameters { EquipmentModel = "Equipment3", PowerConsumption = 0, NoiseImmunity = 12, Weight = 40 },
+                new EquipmentParameters { EquipmentModel = "Equipment4", PowerConsumption = 0, NoiseImmunity = 18, Weight = 50 },
+                new EquipmentParameters { EquipmentModel = "Equipment5", PowerConsumption = 0, NoiseImmunity = 11, Weight = 35 },
+                new EquipmentParameters { EquipmentModel = "Equipment6", PowerConsumption = 0, NoiseImmunity = 14, Weight = 25 }
+            };
+            context.EquipmentParameters.AddRange(equipmentParameters);
+
+            // 7. EquipmentPlacementScheme
+            var equipmentPlacementSchemes = new[]
+            {
+                new EquipmentPlacementScheme { SchemeNumber = 1, EquipmentModel = "Equipment1", DeviceModel = "Device1", CompartmentNumber = 1, SchemeDescription = "Scheme 1 Description", CreationDate = DateTime.Now, UavModel = "UAV1" },
+                new EquipmentPlacementScheme { SchemeNumber = 2, EquipmentModel = "Equipment2", DeviceModel = "Device2", CompartmentNumber = 2, SchemeDescription = "Scheme 2 Description", CreationDate = DateTime.Now, UavModel = "UAV2" },
+                new EquipmentPlacementScheme { SchemeNumber = 3, EquipmentModel = "Equipment3", DeviceModel = "Device3", CompartmentNumber = 3, SchemeDescription = "Scheme 3 Description", CreationDate = DateTime.Now, UavModel = "UAV3" },
+                new EquipmentPlacementScheme { SchemeNumber = 4, EquipmentModel = "Equipment4", DeviceModel = "Device4", CompartmentNumber = 4, SchemeDescription = "Scheme 4 Description", CreationDate = DateTime.Now, UavModel = "UAV4" },
+                new EquipmentPlacementScheme { SchemeNumber = 5, EquipmentModel = "Equipment5", DeviceModel = "Device5", CompartmentNumber = 5, SchemeDescription = "Scheme 5 Description", CreationDate = DateTime.Now, UavModel = "UAV1" },
+                new EquipmentPlacementScheme { SchemeNumber = 6, EquipmentModel = "Equipment6", DeviceModel = "Device6", CompartmentNumber = 6, SchemeDescription = "Scheme 6 Description", CreationDate = DateTime.Now, UavModel = "UAV2" },
+                new EquipmentPlacementScheme { SchemeNumber = 7, EquipmentModel = "Equipment1", DeviceModel = "Device7", CompartmentNumber = 7, SchemeDescription = "Scheme 7 Description", CreationDate = DateTime.Now, UavModel = "UAV3" },
+                new EquipmentPlacementScheme { SchemeNumber = 8, EquipmentModel = "Equipment2", DeviceModel = "Device8", CompartmentNumber = 8, SchemeDescription = "Scheme 8 Description", CreationDate = DateTime.Now, UavModel = "UAV4" },
+                new EquipmentPlacementScheme { SchemeNumber = 9, EquipmentModel = "Equipment3", DeviceModel = "Device9", CompartmentNumber = 9, SchemeDescription = "Scheme 9 Description", CreationDate = DateTime.Now, UavModel = "UAV1" },
+                new EquipmentPlacementScheme { SchemeNumber = 10, EquipmentModel = "Equipment4", DeviceModel = "Device10", CompartmentNumber = 10, SchemeDescription = "Scheme 10 Description", CreationDate = DateTime.Now, UavModel = "UAV2" },
+                new EquipmentPlacementScheme { SchemeNumber = 11, EquipmentModel = "Equipment5", DeviceModel = "Device11", CompartmentNumber = 11, SchemeDescription = "Scheme 11 Description", CreationDate = DateTime.Now, UavModel = "UAV3" },
+                new EquipmentPlacementScheme { SchemeNumber = 12, EquipmentModel = "Equipment6", DeviceModel = "Device12", CompartmentNumber = 12, SchemeDescription = "Scheme 12 Description", CreationDate = DateTime.Now, UavModel = "UAV4" }
+            };
+            context.EquipmentPlacementSchemes.AddRange(equipmentPlacementSchemes);
+
+            // 8. AntennaParameters
+            var antennaParameters = new[]
+            {
+                new AntennaParameters { AntennaMark = "Antenna1", FrequencyRange = 1000000000, Gain = 1, Power = 1, Impedance = 50 },
+                new AntennaParameters { AntennaMark = "Antenna2", FrequencyRange = 1000000000, Gain = 1, Power = 1, Impedance = 50 }
+            };
+            context.AntennaParameters.AddRange(antennaParameters);
+
+            // 9. UavAntenna
+            var uavAntennas = new[]
+            {
+                new UavAntenna { Id = 1, AntennaMark = "Antenna1", UavModel = "UAV1", AntennaModel = "AntennaModel1", Name = "Antenna 1", CoordinateX = 0, CoordinateY = 0, CoordinateZ = 0 },
+                new UavAntenna { Id = 2, AntennaMark = "Antenna2", UavModel = "UAV1", AntennaModel = "AntennaModel2", Name = "Antenna 2", CoordinateX = 10, CoordinateY = 10, CoordinateZ = 10 }
+            };
+            context.UavAntennas.AddRange(uavAntennas);
+
+            // 10. LandingSite
+            var landingSites = new[]
+            {
+                new LandingSite { LandingSiteNumber = 1, UavModel = "UAV1", CoordinateX = 0, CoordinateY = 0, CoordinateZ = 0, WeightLimit = 2000 },
+                new LandingSite { LandingSiteNumber = 2, UavModel = "UAV2", CoordinateX = 10, CoordinateY = 10, CoordinateZ = 10, WeightLimit = 2500 },
+                new LandingSite { LandingSiteNumber = 3, UavModel = "UAV3", CoordinateX = 20, CoordinateY = 20, CoordinateZ = 20, WeightLimit = 3000 },
+                new LandingSite { LandingSiteNumber = 4, UavModel = "UAV4", CoordinateX = 30, CoordinateY = 30, CoordinateZ = 30, WeightLimit = 3500 }
+            };
+            context.LandingSites.AddRange(landingSites);
+
+            // 11. Fuselage
+            var fuselages = new[]
+            {
+                new Fuselage { Id_Fuselage = 1, Name = "Fuselage 1" },
+                new Fuselage { Id_Fuselage = 2, Name = "Fuselage 2" },
+                new Fuselage { Id_Fuselage = 3, Name = "Fuselage 3" },
+                new Fuselage { Id_Fuselage = 4, Name = "Fuselage 4" }
+            };
+            context.Fuselages.AddRange(fuselages);
+
+            // 12. PositionForPlacement
             var positions = new[]
             {
                 new PositionForPlacement { Id_PositionInFuselage = 1, Id_Fuselage = 1, CoordinateX = 0, CoordinateY = 1, CoordinateZ = 2 },
@@ -127,100 +186,38 @@ namespace BLAAutomation
             };
             context.PositionsForPlacement.AddRange(positions);
 
-            // Equipment Placement Schemes
-            var equipmentPlacementSchemes = new[]
+            // 13. CompartmentInFuselage
+            var compartmentsInFuselage = new[]
             {
-                new EquipmentPlacementScheme { SchemeNumber = 1, EquipmentModel = "Equipment1", DeviceModel = "Device1", CompartmentNumber = 1, SchemeDescription = "Scheme 1 Description", CreationDate = DateTime.Now, UavModel = "UAV1" },
-                new EquipmentPlacementScheme { SchemeNumber = 2, EquipmentModel = "Equipment2", DeviceModel = "Device2", CompartmentNumber = 2, SchemeDescription = "Scheme 2 Description", CreationDate = DateTime.Now, UavModel = "UAV2" },
-                new EquipmentPlacementScheme { SchemeNumber = 3, EquipmentModel = "Equipment3", DeviceModel = "Device3", CompartmentNumber = 3, SchemeDescription = "Scheme 3 Description", CreationDate = DateTime.Now, UavModel = "UAV3" },
-                new EquipmentPlacementScheme { SchemeNumber = 4, EquipmentModel = "Equipment4", DeviceModel = "Device4", CompartmentNumber = 4, SchemeDescription = "Scheme 4 Description", CreationDate = DateTime.Now, UavModel = "UAV4" },
-                new EquipmentPlacementScheme { SchemeNumber = 5, EquipmentModel = "Equipment5", DeviceModel = "Device5", CompartmentNumber = 5, SchemeDescription = "Scheme 5 Description", CreationDate = DateTime.Now, UavModel = "UAV1" },
-                new EquipmentPlacementScheme { SchemeNumber = 6, EquipmentModel = "Equipment6", DeviceModel = "Device6", CompartmentNumber = 6, SchemeDescription = "Scheme 6 Description", CreationDate = DateTime.Now, UavModel = "UAV2" },
-                new EquipmentPlacementScheme { SchemeNumber = 7, EquipmentModel = "Equipment1", DeviceModel = "Device7", CompartmentNumber = 7, SchemeDescription = "Scheme 7 Description", CreationDate = DateTime.Now, UavModel = "UAV3" },
-                new EquipmentPlacementScheme { SchemeNumber = 8, EquipmentModel = "Equipment2", DeviceModel = "Device8", CompartmentNumber = 8, SchemeDescription = "Scheme 8 Description", CreationDate = DateTime.Now, UavModel = "UAV4" },
-                new EquipmentPlacementScheme { SchemeNumber = 9, EquipmentModel = "Equipment3", DeviceModel = "Device9", CompartmentNumber = 9, SchemeDescription = "Scheme 9 Description", CreationDate = DateTime.Now, UavModel = "UAV1" },
-                new EquipmentPlacementScheme { SchemeNumber = 10, EquipmentModel = "Equipment4", DeviceModel = "Device10", CompartmentNumber = 10, SchemeDescription = "Scheme 10 Description", CreationDate = DateTime.Now, UavModel = "UAV2" },
-                new EquipmentPlacementScheme { SchemeNumber = 11, EquipmentModel = "Equipment5", DeviceModel = "Device11", CompartmentNumber = 11, SchemeDescription = "Scheme 11 Description", CreationDate = DateTime.Now, UavModel = "UAV3" },
-                new EquipmentPlacementScheme { SchemeNumber = 12, EquipmentModel = "Equipment6", DeviceModel = "Device12", CompartmentNumber = 12, SchemeDescription = "Scheme 12 Description", CreationDate = DateTime.Now, UavModel = "UAV4" }
-            };
-            context.EquipmentPlacementSchemes.AddRange(equipmentPlacementSchemes);
+                new CompartmentInFuselage { Id_Compartment = 1, Id_Fuselage = 1, CoordinateX = 2, CoordinateY = 3, CoordinateZ = 1, Length = 5, Width = 2, Height = 1.5, Carrying = 100 },
+                new CompartmentInFuselage { Id_Compartment = 2, Id_Fuselage = 1, CoordinateX = 5, CoordinateY = 1, CoordinateZ = 2, Length = 5, Width = 2, Height = 1.5, Carrying = 150 },
+                new CompartmentInFuselage { Id_Compartment = 3, Id_Fuselage = 1, CoordinateX = 3, CoordinateY = 4, CoordinateZ = 5, Length = 5, Width = 2, Height = 1.5, Carrying = 200 },
+                new CompartmentInFuselage { Id_Compartment = 4, Id_Fuselage = 1, CoordinateX = 1, CoordinateY = 2, CoordinateZ = 3, Length = 5, Width = 2, Height = 1.5, Carrying = 120 },
 
-            // Devices for Placement
-            var devicesForPlacement = new[]
+                new CompartmentInFuselage { Id_Compartment = 5, Id_Fuselage = 2, CoordinateX = 3, CoordinateY = 2, CoordinateZ = 1, Length = 6, Width = 3, Height = 1.7, Carrying = 110 },
+                new CompartmentInFuselage { Id_Compartment = 6, Id_Fuselage = 2, CoordinateX = 6, CoordinateY = 2, CoordinateZ = 3, Length = 6, Width = 3, Height = 1.7, Carrying = 160 },
+                new CompartmentInFuselage { Id_Compartment = 7, Id_Fuselage = 2, CoordinateX = 4, CoordinateY = 5, CoordinateZ = 6, Length = 6, Width = 3, Height = 1.7, Carrying = 210 },
+                new CompartmentInFuselage { Id_Compartment = 8, Id_Fuselage = 2, CoordinateX = 2, CoordinateY = 3, CoordinateZ = 4, Length = 6, Width = 3, Height = 1.7, Carrying = 130 },
+
+                new CompartmentInFuselage { Id_Compartment = 9, Id_Fuselage = 3, CoordinateX = 4, CoordinateY = 3, CoordinateZ = 2, Length = 7, Width = 3.5, Height = 1.8, Carrying = 120 },
+                new CompartmentInFuselage { Id_Compartment = 10, Id_Fuselage = 3, CoordinateX = 7, CoordinateY = 3, CoordinateZ = 4, Length = 7, Width = 3.5, Height = 1.8, Carrying = 170 },
+                new CompartmentInFuselage { Id_Compartment = 11, Id_Fuselage = 3, CoordinateX = 5, CoordinateY = 6, CoordinateZ = 7, Length = 7, Width = 3.5, Height = 1.8, Carrying = 220 },
+                new CompartmentInFuselage { Id_Compartment = 12, Id_Fuselage = 3, CoordinateX = 3, CoordinateY = 4, CoordinateZ = 5, Length = 7, Width = 3.5, Height = 1.8, Carrying = 140 },
+
+                new CompartmentInFuselage { Id_Compartment = 13, Id_Fuselage = 4, CoordinateX = 5, CoordinateY = 4, CoordinateZ = 3, Length = 8, Width = 4, Height = 2, Carrying = 130 },
+                new CompartmentInFuselage { Id_Compartment = 14, Id_Fuselage = 4, CoordinateX = 8, CoordinateY = 4, CoordinateZ = 5, Length = 8, Width = 4, Height = 2, Carrying = 180 },
+                new CompartmentInFuselage { Id_Compartment = 15, Id_Fuselage = 4, CoordinateX = 6, CoordinateY = 7, CoordinateZ = 8, Length = 8, Width = 4, Height = 2, Carrying = 230 },
+                new CompartmentInFuselage { Id_Compartment = 16, Id_Fuselage = 4, CoordinateX = 4, CoordinateY = 5, CoordinateZ = 6, Length = 8, Width = 4, Height = 2, Carrying = 150 }
+            };
+            context.CompartmentsInFuselage.AddRange(compartmentsInFuselage);
+
+            // 14. AntennaInFuselage
+            var antennasInFuselage = new[]
             {
-                // Project 1 Devices
-                new DeviceForPlacement { Id_Project = 1, Id_Device = "Device1" },
-                new DeviceForPlacement { Id_Project = 1, Id_Device = "Device2" },
-                new DeviceForPlacement { Id_Project = 1, Id_Device = "Device3" },
-                new DeviceForPlacement { Id_Project = 1, Id_Device = "Device4" },
-
-                // Project 2 Devices
-                new DeviceForPlacement { Id_Project = 2, Id_Device = "Device5" },
-                new DeviceForPlacement { Id_Project = 2, Id_Device = "Device6" },
-                new DeviceForPlacement { Id_Project = 2, Id_Device = "Device7" },
-                new DeviceForPlacement { Id_Project = 2, Id_Device = "Device8" },
-
-                // Project 3 Devices
-                new DeviceForPlacement { Id_Project = 3, Id_Device = "Device9" },
-                new DeviceForPlacement { Id_Project = 3, Id_Device = "Device10" },
-                new DeviceForPlacement { Id_Project = 3, Id_Device = "Device11" },
-                new DeviceForPlacement { Id_Project = 3, Id_Device = "Device12" },
-
-                // Project 4 Devices
-                new DeviceForPlacement { Id_Project = 4, Id_Device = "Device1" },
-                new DeviceForPlacement { Id_Project = 4, Id_Device = "Device2" },
-                new DeviceForPlacement { Id_Project = 4, Id_Device = "Device3" },
-                new DeviceForPlacement { Id_Project = 4, Id_Device = "Device4" }
+                new AntennaInFuselage { Id_Antenna = "Antenna1", Id_Fuselage = 1, CoordinateX = 0, CoordinateY = 0, CoordinateZ = 0 },
+                new AntennaInFuselage { Id_Antenna = "Antenna2", Id_Fuselage = 1, CoordinateX = 10, CoordinateY = 10, CoordinateZ = 10 }
             };
-            context.DevicesForPlacement.AddRange(devicesForPlacement);
-
-            // Landing Sites
-            var landingSites = new[]
-            {
-                new LandingSite { LandingSiteNumber = 1, UavModel = "UAV1", CoordinateX = 0, CoordinateY = 0, CoordinateZ = 0, WeightLimit = 2000 },
-                new LandingSite { LandingSiteNumber = 2, UavModel = "UAV2", CoordinateX = 10, CoordinateY = 10, CoordinateZ = 10, WeightLimit = 2500 },
-                new LandingSite { LandingSiteNumber = 3, UavModel = "UAV3", CoordinateX = 20, CoordinateY = 20, CoordinateZ = 20, WeightLimit = 3000 },
-                new LandingSite { LandingSiteNumber = 4, UavModel = "UAV4", CoordinateX = 30, CoordinateY = 30, CoordinateZ = 30, WeightLimit = 3500 }
-            };
-            context.LandingSites.AddRange(landingSites);
-
-            // Fuselages
-            var fuselages = new[]
-            {
-                new Fuselage
-                {
-                    Id = 1,
-                    Name = "Fuselage 1",
-                    AntennasInFuselage = new List<AntennaInFuselage>(uavAntennas.Select(a => new AntennaInFuselage { Id_Antenna = a.AntennaMark, Id_Fuselage = 1, CoordinateX = a.CoordinateX, CoordinateY = a.CoordinateY, CoordinateZ = a.CoordinateZ })),
-                    CompartmentsInFuselage = new List<CompartmentInFuselage>(compartments.Take(4).Select(c => new CompartmentInFuselage { Id_Compartment = c.CompartmentNumber, Id_Fuselage = 1, CoordinateX = c.CoordinateX, CoordinateY = c.CoordinateY, CoordinateZ = c.CoordinateZ, Length = c.Length, Width = c.Width, Height = c.Height, Carrying = c.LoadCapacity })),
-                    PositionsForPlacement = new List<PositionForPlacement>(positions.Where(p => p.Id_Fuselage == 1))
-                },
-                new Fuselage
-                {
-                    Id = 2,
-                    Name = "Fuselage 2",
-                    AntennasInFuselage = new List<AntennaInFuselage>(uavAntennas.Select(a => new AntennaInFuselage { Id_Antenna = a.AntennaMark, Id_Fuselage = 2, CoordinateX = a.CoordinateX, CoordinateY = a.CoordinateY, CoordinateZ = a.CoordinateZ })),
-                    CompartmentsInFuselage = new List<CompartmentInFuselage>(compartments.Skip(4).Take(4).Select(c => new CompartmentInFuselage { Id_Compartment = c.CompartmentNumber, Id_Fuselage = 2, CoordinateX = c.CoordinateX, CoordinateY = c.CoordinateY, CoordinateZ = c.CoordinateZ, Length = c.Length, Width = c.Width, Height = c.Height, Carrying = c.LoadCapacity })),
-                    PositionsForPlacement = new List<PositionForPlacement>(positions.Where(p => p.Id_Fuselage == 2))
-                },
-                new Fuselage
-                {
-                    Id = 3,
-                    Name = "Fuselage 3",
-                    AntennasInFuselage = new List<AntennaInFuselage>(uavAntennas.Select(a => new AntennaInFuselage { Id_Antenna = a.AntennaMark, Id_Fuselage = 3, CoordinateX = a.CoordinateX, CoordinateY = a.CoordinateY, CoordinateZ = a.CoordinateZ })),
-                    CompartmentsInFuselage = new List<CompartmentInFuselage>(compartments.Skip(8).Take(4).Select(c => new CompartmentInFuselage { Id_Compartment = c.CompartmentNumber, Id_Fuselage = 3, CoordinateX = c.CoordinateX, CoordinateY = c.CoordinateY, CoordinateZ = c.CoordinateZ, Length = c.Length, Width = c.Width, Height = c.Height, Carrying = c.LoadCapacity })),
-                    PositionsForPlacement = new List<PositionForPlacement>(positions.Where(p => p.Id_Fuselage == 3))
-                },
-                new Fuselage
-                {
-                    Id = 4,
-                    Name = "Fuselage 4",
-                    AntennasInFuselage = new List<AntennaInFuselage>(uavAntennas.Select(a => new AntennaInFuselage { Id_Antenna = a.AntennaMark, Id_Fuselage = 4, CoordinateX = a.CoordinateX, CoordinateY = a.CoordinateY, CoordinateZ = a.CoordinateZ })),
-                    CompartmentsInFuselage = new List<CompartmentInFuselage>(compartments.Skip(12).Take(4).Select(c => new CompartmentInFuselage { Id_Compartment = c.CompartmentNumber, Id_Fuselage = 4, CoordinateX = c.CoordinateX, CoordinateY = c.CoordinateY, CoordinateZ = c.CoordinateZ, Length = c.Length, Width = c.Width, Height = c.Height, Carrying = c.LoadCapacity })),
-                    PositionsForPlacement = new List<PositionForPlacement>(positions.Where(p => p.Id_Fuselage == 4))
-                }
-            };
-            context.Fuselages.AddRange(fuselages);
+            context.AntennasInFuselage.AddRange(antennasInFuselage);
 
             context.SaveChanges();
         }
