@@ -3,10 +3,10 @@ using MaterialSkin.Controls;
 using BLAAutomation.Models;
 using System;
 using System.Data.Entity;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using System.IO;
+using System.Text;
 
 public partial class ViewProjectsForm : MaterialForm
 {
@@ -32,7 +32,17 @@ public partial class ViewProjectsForm : MaterialForm
     {
         using (var context = new UavContext())
         {
-            projectsDataGridView.DataSource = context.Projects.ToList();
+            var projects = context.Projects
+                .Include(p => p.UavParameters)
+                .ToList()
+                .Select(p => new ProjectDto
+                {
+                    ProjectNumber = p.ProjectNumber,
+                    ProjectName = p.ProjectName,
+                    UavModel = p.UavModel
+                }).ToList();
+
+            projectsDataGridView.DataSource = projects;
         }
     }
 
@@ -42,8 +52,16 @@ public partial class ViewProjectsForm : MaterialForm
         using (var context = new UavContext())
         {
             var filteredProjects = context.Projects
+                .Include(p => p.UavParameters)
                 .Where(p => p.ProjectName.Contains(filterText))
-                .ToList();
+                .ToList()
+                .Select(p => new ProjectDto
+                {
+                    ProjectNumber = p.ProjectNumber,
+                    ProjectName = p.ProjectName,
+                    UavModel = p.UavModel
+                }).ToList();
+
             projectsDataGridView.DataSource = filteredProjects;
         }
     }
@@ -89,7 +107,14 @@ public partial class ViewProjectsForm : MaterialForm
     {
         using (var context = new UavContext())
         {
-            var projects = context.Projects.ToList();
+            var projects = context.Projects.ToList()
+                .Select(p => new ProjectDto
+                {
+                    ProjectNumber = p.ProjectNumber,
+                    ProjectName = p.ProjectName,
+                    UavModel = p.UavModel
+                }).ToList();
+
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "CSV files (*.csv)|*.csv",
@@ -153,5 +178,31 @@ public partial class ViewProjectsForm : MaterialForm
 
     private void ViewProjectsForm_Load(object sender, EventArgs e)
     {
+        using (var context = new UavContext())
+        {
+            var projects = context.Projects.ToList()
+                .Select(p => new ProjectDto
+                {
+                    ProjectNumber = p.ProjectNumber,
+                    ProjectName = p.ProjectName,
+                    UavModel = p.UavModel
+                }).ToList();
+
+            projectsDataGridView.DataSource = projects;
+        }
+    }
+
+    private void projectsDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    {
+
     }
 }
+
+
+public class ProjectDto
+{
+    public int ProjectNumber { get; set; }
+    public string ProjectName { get; set; }
+    public string UavModel { get; set; }
+}
+

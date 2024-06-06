@@ -2,8 +2,8 @@
 using MaterialSkin;
 using MaterialSkin.Controls;
 using System;
-using System.Windows.Forms;
 using System.Linq;
+using System.Windows.Forms;
 
 public partial class MainForm : MaterialForm
 {
@@ -44,11 +44,21 @@ public partial class MainForm : MaterialForm
         var addFuselageMenuItem = new ToolStripMenuItem("Добавить фюзеляж", null, AddFuselageMenuItem_Click);
         var addLandingSiteMenuItem = new ToolStripMenuItem("Добавить место посадки", null, AddLandingSiteMenuItem_Click);
         var addEquipmentSchemeMenuItem = new ToolStripMenuItem("Добавить схему размещения", null, AddEquipmentSchemeMenuItem_Click);
+        var viewAntennasMenuItem = new ToolStripMenuItem("Просмотреть антенны", null, ViewAntennasMenuItem_Click);
+        var viewDevicesMenuItem = new ToolStripMenuItem("Просмотреть устройства", null, ViewDevicesMenuItem_Click);
+        var viewFuselagesMenuItem = new ToolStripMenuItem("Просмотреть фюзеляжи", null, ViewFuselagesMenuItem_Click);
+        var viewLandingSitesMenuItem = new ToolStripMenuItem("Просмотреть места посадки", null, ViewLandingSitesMenuItem_Click);
+        var viewEquipmentSchemesMenuItem = new ToolStripMenuItem("Просмотреть схемы размещения", null, ViewEquipmentSchemesMenuItem_Click);
         dataMenuItem.DropDownItems.Add(addAntennaMenuItem);
         dataMenuItem.DropDownItems.Add(addDeviceMenuItem);
         dataMenuItem.DropDownItems.Add(addFuselageMenuItem);
         dataMenuItem.DropDownItems.Add(addLandingSiteMenuItem);
         dataMenuItem.DropDownItems.Add(addEquipmentSchemeMenuItem);
+        dataMenuItem.DropDownItems.Add(viewAntennasMenuItem);
+        dataMenuItem.DropDownItems.Add(viewDevicesMenuItem);
+        dataMenuItem.DropDownItems.Add(viewFuselagesMenuItem);
+        dataMenuItem.DropDownItems.Add(viewLandingSitesMenuItem);
+        dataMenuItem.DropDownItems.Add(viewEquipmentSchemesMenuItem);
 
         // Алгоритм
         var algorithmMenuItem = new ToolStripMenuItem("Алгоритм", null, AlgorithmMenuItem_Click);
@@ -109,6 +119,36 @@ public partial class MainForm : MaterialForm
         form.Show();
     }
 
+    private void ViewAntennasMenuItem_Click(object sender, EventArgs e)
+    {
+        var form = new ViewAntennaForm();
+        form.Show();
+    }
+
+    private void ViewDevicesMenuItem_Click(object sender, EventArgs e)
+    {
+        var form = new ViewDeviceForm();
+        form.Show();
+    }
+
+    private void ViewFuselagesMenuItem_Click(object sender, EventArgs e)
+    {
+        var form = new ViewFuselageForm();
+        form.Show();
+    }
+
+    private void ViewLandingSitesMenuItem_Click(object sender, EventArgs e)
+    {
+        var form = new ViewLandingSitesForm();
+        form.Show();
+    }
+
+    private void ViewEquipmentSchemesMenuItem_Click(object sender, EventArgs e)
+    {
+        var form = new ViewEquipmentPlacementSchemesForm();
+        form.Show();
+    }
+
     private void AlgorithmMenuItem_Click(object sender, EventArgs e)
     {
         var form = new AlgorithmSettingsForm();
@@ -117,7 +157,7 @@ public partial class MainForm : MaterialForm
 
     private void AboutMenuItem_Click(object sender, EventArgs e)
     {
-        var form = new AboutForm(); // Предполагается, что форма AboutForm существует
+        var form = new AboutForm();
         form.Show();
     }
 
@@ -134,6 +174,11 @@ public partial class MainForm : MaterialForm
             var landingSites = context.LandingSites.ToList();
             var uavDevices = context.UavDevices.ToList();
             var equipmentPlacementSchemes = context.EquipmentPlacementSchemes.ToList();
+            var positionsForPlacement = context.PositionsForPlacement.ToList();
+            var devicesForPlacement = context.DevicesForPlacement.ToList();
+            var fuselages = context.Fuselages.ToList();
+            var compartmentsInFuselage = context.CompartmentsInFuselage.ToList();
+            var antennasInFuselage = context.AntennasInFuselage.ToList();
 
             MessageBox.Show($"Projects: {projects.Count}\n" +
                             $"UAV Parameters: {uavParameters.Count}\n" +
@@ -143,8 +188,12 @@ public partial class MainForm : MaterialForm
                             $"UAV Antennas: {uavAntennas.Count}\n" +
                             $"Landing Sites: {landingSites.Count}\n" +
                             $"UAV Devices: {uavDevices.Count}\n" +
-                            $"Equipment Placement Schemes: {equipmentPlacementSchemes.Count}");
+                            $"Equipment Placement Schemes: {equipmentPlacementSchemes.Count}\n" +
+                            $"Positions For Placement: {positionsForPlacement.Count}\n" +
+                            $"Devices For Placement: {devicesForPlacement.Count}\n" +
+                            $"Fuselages: {fuselages.Count}\n" +
+                            $"Compartments In Fuselage: {compartmentsInFuselage.Count}\n" +
+                            $"Antennas In Fuselage: {antennasInFuselage.Count}");
         }
     }
-
 }

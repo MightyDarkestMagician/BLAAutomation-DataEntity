@@ -122,6 +122,7 @@
             this.antennaDataGridView.ReadOnly = true;
             this.antennaDataGridView.Size = new System.Drawing.Size(800, 300);
             this.antennaDataGridView.TabIndex = 6;
+            this.antennaDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.antennaDataGridView_CellContentClick);
             // 
             // ViewAntennaForm
             // 

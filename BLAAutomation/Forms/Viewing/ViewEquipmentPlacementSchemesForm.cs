@@ -32,7 +32,24 @@ public partial class ViewEquipmentPlacementSchemesForm : MaterialForm
     {
         using (var context = new UavContext())
         {
-            equipmentPlacementSchemesDataGridView.DataSource = context.EquipmentPlacementSchemes.ToList();
+            var schemes = context.EquipmentPlacementSchemes
+                .Include(s => s.EquipmentParameters)
+                .Include(s => s.UavDevice)
+                .Include(s => s.UavCompartment)
+                .Include(s => s.UavParameters)
+                .ToList()
+                .Select(s => new EquipmentPlacementSchemeDto
+                {
+                    SchemeNumber = s.SchemeNumber,
+                    EquipmentModel = s.EquipmentModel,
+                    DeviceModel = s.DeviceModel,
+                    CompartmentNumber = s.CompartmentNumber,
+                    SchemeDescription = s.SchemeDescription,
+                    CreationDate = s.CreationDate,
+                    UavModel = s.UavModel
+                }).ToList();
+
+            equipmentPlacementSchemesDataGridView.DataSource = schemes;
         }
     }
 
@@ -43,7 +60,22 @@ public partial class ViewEquipmentPlacementSchemesForm : MaterialForm
         {
             var filteredSchemes = context.EquipmentPlacementSchemes
                 .Where(s => s.SchemeDescription.Contains(filterText))
-                .ToList();
+                .Include(s => s.EquipmentParameters)
+                .Include(s => s.UavDevice)
+                .Include(s => s.UavCompartment)
+                .Include(s => s.UavParameters)
+                .ToList()
+                .Select(s => new EquipmentPlacementSchemeDto
+                {
+                    SchemeNumber = s.SchemeNumber,
+                    EquipmentModel = s.EquipmentModel,
+                    DeviceModel = s.DeviceModel,
+                    CompartmentNumber = s.CompartmentNumber,
+                    SchemeDescription = s.SchemeDescription,
+                    CreationDate = s.CreationDate,
+                    UavModel = s.UavModel
+                }).ToList();
+
             equipmentPlacementSchemesDataGridView.DataSource = filteredSchemes;
         }
     }
@@ -55,8 +87,8 @@ public partial class ViewEquipmentPlacementSchemesForm : MaterialForm
             var selectedRow = equipmentPlacementSchemesDataGridView.SelectedRows[0];
             int schemeNumber = (int)selectedRow.Cells["SchemeNumber"].Value;
 
-            var editForm = new EditEquipmentPlacementSchemeForm(schemeNumber);
-            editForm.ShowDialog();
+            var editEquipmentPlacementSchemeForm = new EditEquipmentPlacementSchemeForm(schemeNumber);
+            editEquipmentPlacementSchemeForm.ShowDialog();
             LoadEquipmentPlacementSchemes();
         }
     }
@@ -68,7 +100,7 @@ public partial class ViewEquipmentPlacementSchemesForm : MaterialForm
             var selectedRow = equipmentPlacementSchemesDataGridView.SelectedRows[0];
             int schemeNumber = (int)selectedRow.Cells["SchemeNumber"].Value;
 
-            var result = MessageBox.Show("Вы уверены, что хотите удалить эту схему?", "Удаление схемы", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result = MessageBox.Show("Вы уверены, что хотите удалить эту схему размещения оборудования?", "Удаление схемы размещения оборудования", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
                 using (var context = new UavContext())
@@ -89,22 +121,38 @@ public partial class ViewEquipmentPlacementSchemesForm : MaterialForm
     {
         using (var context = new UavContext())
         {
-            var schemes = context.EquipmentPlacementSchemes.ToList();
+            var schemes = context.EquipmentPlacementSchemes
+                .Include(s => s.EquipmentParameters)
+                .Include(s => s.UavDevice)
+                .Include(s => s.UavCompartment)
+                .Include(s => s.UavParameters)
+                .ToList()
+                .Select(s => new EquipmentPlacementSchemeDto
+                {
+                    SchemeNumber = s.SchemeNumber,
+                    EquipmentModel = s.EquipmentModel,
+                    DeviceModel = s.DeviceModel,
+                    CompartmentNumber = s.CompartmentNumber,
+                    SchemeDescription = s.SchemeDescription,
+                    CreationDate = s.CreationDate,
+                    UavModel = s.UavModel
+                }).ToList();
+
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "CSV files (*.csv)|*.csv",
-                Title = "Сохранить схемы как CSV"
+                Title = "Сохранить схемы размещения оборудования как CSV"
             };
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName, false, Encoding.UTF8))
                 {
-                    writer.WriteLine("SchemeNumber,EquipmentModel,CompartmentNumber,SchemeDescription,CreationDate,UavModel");
+                    writer.WriteLine("SchemeNumber,EquipmentModel,DeviceModel,CompartmentNumber,SchemeDescription,CreationDate,UavModel");
 
                     foreach (var scheme in schemes)
                     {
-                        writer.WriteLine($"{scheme.SchemeNumber},{scheme.EquipmentModel},{scheme.CompartmentNumber},{scheme.SchemeDescription},{scheme.CreationDate},{scheme.UavModel}");
+                        writer.WriteLine($"{scheme.SchemeNumber},{scheme.EquipmentModel},{scheme.DeviceModel},{scheme.CompartmentNumber},{scheme.SchemeDescription},{scheme.CreationDate},{scheme.UavModel}");
                     }
                 }
 
@@ -118,7 +166,7 @@ public partial class ViewEquipmentPlacementSchemesForm : MaterialForm
         OpenFileDialog openFileDialog = new OpenFileDialog
         {
             Filter = "CSV files (*.csv)|*.csv",
-            Title = "Импортировать схемы из CSV"
+            Title = "Импортировать схемы размещения оборудования из CSV"
         };
 
         if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -137,10 +185,11 @@ public partial class ViewEquipmentPlacementSchemesForm : MaterialForm
                             {
                                 SchemeNumber = int.Parse(values[0]),
                                 EquipmentModel = values[1],
-                                CompartmentNumber = int.Parse(values[2]),
-                                SchemeDescription = values[3],
-                                CreationDate = DateTime.Parse(values[4]),
-                                UavModel = values[5]
+                                DeviceModel = values[2],
+                                CompartmentNumber = int.Parse(values[3]),
+                                SchemeDescription = values[4],
+                                CreationDate = DateTime.Parse(values[5]),
+                                UavModel = values[6]
                             };
                             context.EquipmentPlacementSchemes.Add(scheme);
                         }
@@ -156,5 +205,22 @@ public partial class ViewEquipmentPlacementSchemesForm : MaterialForm
 
     private void ViewEquipmentPlacementSchemesForm_Load(object sender, EventArgs e)
     {
+        LoadEquipmentPlacementSchemes();
     }
+
+    private void equipmentPlacementSchemesDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    {
+
+    }
+}
+
+public class EquipmentPlacementSchemeDto
+{
+    public int SchemeNumber { get; set; }
+    public string EquipmentModel { get; set; }
+    public string DeviceModel { get; set; }
+    public int CompartmentNumber { get; set; }
+    public string SchemeDescription { get; set; }
+    public DateTime CreationDate { get; set; }
+    public string UavModel { get; set; }
 }

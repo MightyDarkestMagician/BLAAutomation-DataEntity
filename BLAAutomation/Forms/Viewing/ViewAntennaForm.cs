@@ -32,7 +32,17 @@ public partial class ViewAntennaForm : MaterialForm
     {
         using (var context = new UavContext())
         {
-            antennaDataGridView.DataSource = context.AntennaParameters.ToList();
+            var antennas = context.AntennaParameters.ToList()
+                .Select(a => new AntennaDto
+                {
+                    AntennaMark = a.AntennaMark,
+                    FrequencyRange = a.FrequencyRange,
+                    Gain = a.Gain,
+                    Power = a.Power,
+                    Impedance = a.Impedance
+                }).ToList();
+
+            antennaDataGridView.DataSource = antennas;
         }
     }
 
@@ -43,7 +53,16 @@ public partial class ViewAntennaForm : MaterialForm
         {
             var filteredAntennas = context.AntennaParameters
                 .Where(a => a.AntennaMark.Contains(filterText))
-                .ToList();
+                .ToList()
+                .Select(a => new AntennaDto
+                {
+                    AntennaMark = a.AntennaMark,
+                    FrequencyRange = a.FrequencyRange,
+                    Gain = a.Gain,
+                    Power = a.Power,
+                    Impedance = a.Impedance
+                }).ToList();
+
             antennaDataGridView.DataSource = filteredAntennas;
         }
     }
@@ -89,7 +108,16 @@ public partial class ViewAntennaForm : MaterialForm
     {
         using (var context = new UavContext())
         {
-            var antennas = context.AntennaParameters.ToList();
+            var antennas = context.AntennaParameters.ToList()
+                .Select(a => new AntennaDto
+                {
+                    AntennaMark = a.AntennaMark,
+                    FrequencyRange = a.FrequencyRange,
+                    Gain = a.Gain,
+                    Power = a.Power,
+                    Impedance = a.Impedance
+                }).ToList();
+
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "CSV files (*.csv)|*.csv",
@@ -155,5 +183,20 @@ public partial class ViewAntennaForm : MaterialForm
 
     private void ViewAntennaForm_Load(object sender, EventArgs e)
     {
+        LoadAntennas();
     }
+
+    private void antennaDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    {
+
+    }
+}
+
+public class AntennaDto
+{
+    public string AntennaMark { get; set; }
+    public double FrequencyRange { get; set; }
+    public double Gain { get; set; }
+    public double Power { get; set; }
+    public double Impedance { get; set; }
 }

@@ -32,7 +32,18 @@ public partial class ViewLandingSitesForm : MaterialForm
     {
         using (var context = new UavContext())
         {
-            landingSiteDataGridView.DataSource = context.LandingSites.ToList();
+            var landingSites = context.LandingSites.ToList()
+                .Select(ls => new LandingSiteDto
+                {
+                    LandingSiteNumber = ls.LandingSiteNumber,
+                    UavModel = ls.UavModel,
+                    CoordinateX = ls.CoordinateX,
+                    CoordinateY = ls.CoordinateY,
+                    CoordinateZ = ls.CoordinateZ,
+                    WeightLimit = ls.WeightLimit
+                }).ToList();
+
+            landingSiteDataGridView.DataSource = landingSites;
         }
     }
 
@@ -42,8 +53,18 @@ public partial class ViewLandingSitesForm : MaterialForm
         using (var context = new UavContext())
         {
             var filteredLandingSites = context.LandingSites
-                .Where(a => a.UavModel.Contains(filterText))
-                .ToList();
+                .Where(ls => ls.UavModel.Contains(filterText))
+                .ToList()
+                .Select(ls => new LandingSiteDto
+                {
+                    LandingSiteNumber = ls.LandingSiteNumber,
+                    UavModel = ls.UavModel,
+                    CoordinateX = ls.CoordinateX,
+                    CoordinateY = ls.CoordinateY,
+                    CoordinateZ = ls.CoordinateZ,
+                    WeightLimit = ls.WeightLimit
+                }).ToList();
+
             landingSiteDataGridView.DataSource = filteredLandingSites;
         }
     }
@@ -89,7 +110,17 @@ public partial class ViewLandingSitesForm : MaterialForm
     {
         using (var context = new UavContext())
         {
-            var landingSites = context.LandingSites.ToList();
+            var landingSites = context.LandingSites.ToList()
+                .Select(ls => new LandingSiteDto
+                {
+                    LandingSiteNumber = ls.LandingSiteNumber,
+                    UavModel = ls.UavModel,
+                    CoordinateX = ls.CoordinateX,
+                    CoordinateY = ls.CoordinateY,
+                    CoordinateZ = ls.CoordinateZ,
+                    WeightLimit = ls.WeightLimit
+                }).ToList();
+
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "CSV files (*.csv)|*.csv",
@@ -156,5 +187,16 @@ public partial class ViewLandingSitesForm : MaterialForm
 
     private void ViewLandingSitesForm_Load(object sender, EventArgs e)
     {
+        LoadLandingSites();
     }
+}
+
+public class LandingSiteDto
+{
+    public int LandingSiteNumber { get; set; }
+    public string UavModel { get; set; }
+    public double CoordinateX { get; set; }
+    public double CoordinateY { get; set; }
+    public double CoordinateZ { get; set; }
+    public double WeightLimit { get; set; }
 }

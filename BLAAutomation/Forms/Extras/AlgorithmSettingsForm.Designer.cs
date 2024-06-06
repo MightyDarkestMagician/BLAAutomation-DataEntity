@@ -1,31 +1,43 @@
-﻿partial class AlgorithmSettingsForm
-{
-    private System.ComponentModel.IContainer components = null;
-    private MaterialSkin.Controls.MaterialSingleLineTextField _populationSizeField;
-    private MaterialSkin.Controls.MaterialSingleLineTextField _generationCountField;
-    private MaterialSkin.Controls.MaterialSingleLineTextField _crossoverCountField;
-    private MaterialSkin.Controls.MaterialSingleLineTextField _mutationCountField;
-    private MaterialSkin.Controls.MaterialRaisedButton _saveButton;
+﻿using System.Windows.Forms;
 
-    protected override void Dispose(bool disposing)
+partial class AlgorithmSettingsForm
     {
-        if (disposing && (components != null))
+        private System.ComponentModel.IContainer components = null;
+        private MaterialSkin.Controls.MaterialSingleLineTextField _populationSizeField;
+        private MaterialSkin.Controls.MaterialSingleLineTextField _generationCountField;
+        private MaterialSkin.Controls.MaterialSingleLineTextField _crossoverCountField;
+        private MaterialSkin.Controls.MaterialSingleLineTextField _mutationCountField;
+        private MaterialSkin.Controls.MaterialRaisedButton _saveButton;
+        private ComboBox projectComboBox;
+
+        protected override void Dispose(bool disposing)
         {
-            components.Dispose();
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
         }
-        base.Dispose(disposing);
-    }
 
-    #region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-    private void InitializeComponent()
-    {
+        private void InitializeComponent()
+        {
+            this.projectComboBox = new ComboBox();
             this._populationSizeField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this._generationCountField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this._crossoverCountField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this._mutationCountField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this._saveButton = new MaterialSkin.Controls.MaterialRaisedButton();
             this.SuspendLayout();
+            // 
+            // projectComboBox
+            // 
+            this.projectComboBox.FormattingEnabled = true;
+            this.projectComboBox.Location = new System.Drawing.Point(49, 60);
+            this.projectComboBox.Name = "projectComboBox";
+            this.projectComboBox.Size = new System.Drawing.Size(300, 21);
+            this.projectComboBox.TabIndex = 5;
             // 
             // _populationSizeField
             // 
@@ -108,6 +120,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(400, 300);
+            this.Controls.Add(this.projectComboBox);
             this.Controls.Add(this._populationSizeField);
             this.Controls.Add(this._generationCountField);
             this.Controls.Add(this._crossoverCountField);
@@ -117,8 +130,7 @@
             this.Text = "Настройки алгоритма";
             this.Load += new System.EventHandler(this.AlgorithmSettingsForm_Load);
             this.ResumeLayout(false);
+        }
 
+        #endregion
     }
-
-    #endregion
-}

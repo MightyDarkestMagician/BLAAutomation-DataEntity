@@ -1,7 +1,6 @@
-﻿using BLAAutomation.Models;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 
-namespace PlcaementWithGenetiAlgorithm
+namespace BLAAutomation.Models
 {
     public class UavContext : DbContext
     {
@@ -18,7 +17,7 @@ namespace PlcaementWithGenetiAlgorithm
         public DbSet<DeviceForPlacement> DevicesForPlacement { get; set; }
         public DbSet<Fuselage> Fuselages { get; set; }
         public DbSet<CompartmentInFuselage> CompartmentsInFuselage { get; set; }
-        public DbSet<AntennaInFuselage> AntennaInFuselage { get; set; }
+        public DbSet<AntennaInFuselage> AntennasInFuselage { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -66,7 +65,7 @@ namespace PlcaementWithGenetiAlgorithm
 
             modelBuilder.Entity<PositionForPlacement>()
                 .HasRequired(p => p.Fuselage)
-                .WithMany(f => f.PositionsForFuselage)
+                .WithMany(f => f.PositionsForPlacement)
                 .HasForeignKey(p => p.Id_Fuselage)
                 .WillCascadeOnDelete(false);
 
@@ -77,8 +76,8 @@ namespace PlcaementWithGenetiAlgorithm
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<DeviceForPlacement>()
-                .HasRequired(d => d.Device)
-                .WithMany(dev => dev.DevicesForPlacement)
+                .HasRequired(d => d.UavDevice)
+                .WithMany(d => d.DeviceForPlacements)
                 .HasForeignKey(d => d.Id_Device)
                 .WillCascadeOnDelete(false);
 
@@ -90,13 +89,13 @@ namespace PlcaementWithGenetiAlgorithm
 
             modelBuilder.Entity<AntennaInFuselage>()
                 .HasRequired(a => a.Fuselage)
-                .WithMany(f => f.AntennasForFuselage)
+                .WithMany(f => f.AntennasInFuselage)
                 .HasForeignKey(a => a.Id_Fuselage)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<AntennaInFuselage>()
-                .HasRequired(a => a.Antenna)
-                .WithMany(an => an.AntennasInFuselage)
+                .HasRequired(a => a.AntennaParameters)
+                .WithMany(a => a.AntennasInFuselage)
                 .HasForeignKey(a => a.Id_Antenna)
                 .WillCascadeOnDelete(false);
         }

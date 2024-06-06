@@ -32,7 +32,15 @@ public partial class ViewDeviceForm : MaterialForm
     {
         using (var context = new UavContext())
         {
-            deviceDataGridView.DataSource = context.UavDevices.ToList();
+            var devices = context.UavDevices.ToList()
+                .Select(d => new DeviceDto
+                {
+                    DeviceModel = d.DeviceModel,
+                    Weight = d.Weight,
+                    NoiseImmunity = d.NoiseImmunity
+                }).ToList();
+
+            deviceDataGridView.DataSource = devices;
         }
     }
 
@@ -43,7 +51,14 @@ public partial class ViewDeviceForm : MaterialForm
         {
             var filteredDevices = context.UavDevices
                 .Where(d => d.DeviceModel.Contains(filterText))
-                .ToList();
+                .ToList()
+                .Select(d => new DeviceDto
+                {
+                    DeviceModel = d.DeviceModel,
+                    Weight = d.Weight,
+                    NoiseImmunity = d.NoiseImmunity
+                }).ToList();
+
             deviceDataGridView.DataSource = filteredDevices;
         }
     }
@@ -89,7 +104,14 @@ public partial class ViewDeviceForm : MaterialForm
     {
         using (var context = new UavContext())
         {
-            var devices = context.UavDevices.ToList();
+            var devices = context.UavDevices.ToList()
+                .Select(d => new DeviceDto
+                {
+                    DeviceModel = d.DeviceModel,
+                    Weight = d.Weight,
+                    NoiseImmunity = d.NoiseImmunity
+                }).ToList();
+
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "CSV files (*.csv)|*.csv",
@@ -153,5 +175,18 @@ public partial class ViewDeviceForm : MaterialForm
 
     private void ViewDeviceForm_Load(object sender, EventArgs e)
     {
+        LoadDevices();
     }
+
+    private void deviceDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    {
+
+    }
+}
+
+public class DeviceDto
+{
+    public string DeviceModel { get; set; }
+    public double Weight { get; set; }
+    public double NoiseImmunity { get; set; }
 }

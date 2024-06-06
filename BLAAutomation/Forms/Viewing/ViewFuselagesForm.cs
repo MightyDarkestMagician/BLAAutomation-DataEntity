@@ -32,7 +32,16 @@ public partial class ViewFuselageForm : MaterialForm
     {
         using (var context = new UavContext())
         {
-            fuselageDataGridView.DataSource = context.UavParameters.ToList();
+            var fuselages = context.UavParameters.ToList()
+                .Select(f => new FuselageDto
+                {
+                    UavModel = f.UavModel,
+                    Name = f.Name,
+                    TotalCompartments = f.TotalCompartments,
+                    Weight = f.Weight
+                }).ToList();
+
+            fuselageDataGridView.DataSource = fuselages;
         }
     }
 
@@ -43,7 +52,15 @@ public partial class ViewFuselageForm : MaterialForm
         {
             var filteredFuselages = context.UavParameters
                 .Where(f => f.Name.Contains(filterText))
-                .ToList();
+                .ToList()
+                .Select(f => new FuselageDto
+                {
+                    UavModel = f.UavModel,
+                    Name = f.Name,
+                    TotalCompartments = f.TotalCompartments,
+                    Weight = f.Weight
+                }).ToList();
+
             fuselageDataGridView.DataSource = filteredFuselages;
         }
     }
@@ -89,7 +106,15 @@ public partial class ViewFuselageForm : MaterialForm
     {
         using (var context = new UavContext())
         {
-            var fuselages = context.UavParameters.ToList();
+            var fuselages = context.UavParameters.ToList()
+                .Select(f => new FuselageDto
+                {
+                    UavModel = f.UavModel,
+                    Name = f.Name,
+                    TotalCompartments = f.TotalCompartments,
+                    Weight = f.Weight
+                }).ToList();
+
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "CSV files (*.csv)|*.csv",
@@ -154,10 +179,19 @@ public partial class ViewFuselageForm : MaterialForm
 
     private void ViewFuselageForm_Load(object sender, EventArgs e)
     {
+        LoadFuselages();
     }
 
     private void fuselageDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
     {
 
     }
+}
+
+public class FuselageDto
+{
+    public string UavModel { get; set; }
+    public string Name { get; set; }
+    public int TotalCompartments { get; set; }
+    public double Weight { get; set; }
 }

@@ -1,10 +1,11 @@
 ﻿using MaterialSkin;
 using MaterialSkin.Controls;
 using System;
+using System.Data.Entity;
+using System.Linq;
 using System.Windows.Forms;
 using BLAAutomation.Models;
-using BLAAutomation.Forms.Algorithms;
-using System.Linq;
+using System.Windows.Controls;
 
 public partial class AlgorithmSettingsForm : MaterialForm
 {
@@ -22,15 +23,32 @@ public partial class AlgorithmSettingsForm : MaterialForm
             TextShade.WHITE
         );
 
-        // Настройка элементов формы
         InitializeComponent();
+        LoadProjects();
+    }
+
+    private void LoadProjects()
+    {
+        using (var context = new UavContext())
+        {
+            var projects = context.Projects.ToList();
+            foreach (var project in projects)
+            {
+                projectComboBox.Items.Add(new ComboBoxItem { Text = project.ProjectName, Value = project.ProjectNumber });
+            }
+        }
     }
 
     private void SaveAlgorithmSettings(object sender, EventArgs e)
     {
         try
         {
-            // Валидация данных
+            if (projectComboBox.SelectedItem == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите проект.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (int.TryParse(_populationSizeField.Text, out int populationSize) &&
                 int.TryParse(_generationCountField.Text, out int generationCount) &&
                 int.TryParse(_crossoverCountField.Text, out int crossoverCount) &&
@@ -42,10 +60,13 @@ public partial class AlgorithmSettingsForm : MaterialForm
                     return;
                 }
 
-                // Получение текущего проекта
+                var selectedProjectNumber = ((ComboBoxItem)projectComboBox.SelectedItem).Value;
                 using (var context = new UavContext())
                 {
-                    var selectedProject = context.Projects.FirstOrDefault(); // Замените на метод получения выбранного проекта
+                    var selectedProject = context.Projects.Include(p => p.UavParameters)
+                                                           .Include(p => p.UavParameters.Compartments)
+                                                           .Include(p => p.DevicesForPlacement.Select(dfp => dfp.UavDevice))
+                                                           .FirstOrDefault(p => p.ProjectNumber == selectedProjectNumber);
                     if (selectedProject == null)
                     {
                         MessageBox.Show("Проект не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -54,15 +75,10 @@ public partial class AlgorithmSettingsForm : MaterialForm
 
                     // Сохранение настроек алгоритма
                     var settings = new GeneticAlgorithm(selectedProject, populationSize, generationCount, crossoverCount, mutationCount);
-
-                    // Здесь можно сохранить настройки в базу данных или передать их в алгоритм
-                    // Например:
-                    // context.GeneticAlgorithmSettings.Add(settings);
-                    // context.SaveChanges();
-
-                    MessageBox.Show("Настройки алгоритма успешно сохранены.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close();
+                    settings.MainProcess();
                 }
+
+                MessageBox.Show("Настройки алгоритма успешно сохранены и процесс выполнен.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -80,4 +96,16 @@ public partial class AlgorithmSettingsForm : MaterialForm
     private void _crossoverCountField_Click(object sender, EventArgs e) { }
     private void _mutationCountField_Click(object sender, EventArgs e) { }
     private void AlgorithmSettingsForm_Load(object sender, EventArgs e) { }
+
+    // ComboBox item class
+    private class ComboBoxItem
+    {
+        public string Text { get; set; }
+        public int Value { get; set; }
+
+        public override string ToString()
+        {
+            return Text;
+        }
+    }
 }
